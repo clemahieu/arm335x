@@ -587,6 +587,18 @@ public:
 	{
 		return arm33x_gpio (base + 0x04e07000);
 	}
+	arm33x_gpio gpio1 ()
+	{
+		return arm33x_gpio (base + 0x0804c000);
+	}
+	arm33x_gpio gpio2 ()
+	{
+		return arm33x_gpio (base + 0x081ac000);
+	}
+	arm33x_gpio gpio3 ()
+	{
+		return arm33x_gpio (base + 0x081ae000);
+	}
 	arm33x_epwm epwm0 ()
 	{
 		return arm33x_epwm (base + 0x08300200);
