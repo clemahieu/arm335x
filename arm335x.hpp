@@ -71,6 +71,10 @@ public:
 	{
 		return reg32 (base + 0x40);
 	}
+	reg32_p adcstat ()
+	{
+		return reg32 (base + 0x44);
+	}
 	reg32_p range ()
 	{
 		return reg32 (base + 0x48);
@@ -563,18 +567,6 @@ public:
 	base (base_a)
 	{
 	}
-	arm33x_epwm epwm0 ()
-	{
-		return arm33x_epwm (base + 0x08300200);
-	}
-	arm33x_epwm epwm1 ()
-	{
-		return arm33x_epwm (base + 0x08302200);
-	}
-	arm33x_epwm epwm2 ()
-	{
-		return arm33x_epwm (base + 0x08304200);
-	}
 	arm33x_prm prm_irq ()
 	{
 		return arm33x_prm (base + 0x04e00b00);
@@ -594,6 +586,18 @@ public:
 	arm33x_gpio gpio0 ()
 	{
 		return arm33x_gpio (base + 0x04e07000);
+	}
+	arm33x_epwm epwm0 ()
+	{
+		return arm33x_epwm (base + 0x08300200);
+	}
+	arm33x_epwm epwm1 ()
+	{
+		return arm33x_epwm (base + 0x08302200);
+	}
+	arm33x_epwm epwm2 ()
+	{
+		return arm33x_epwm (base + 0x08304200);
 	}
 	uintptr_t base;
 	static uintptr_t constexpr mapping_base = 0x40000000;
