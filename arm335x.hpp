@@ -150,6 +150,14 @@ public:
 	base (base_a)
 	{
 	}
+	reg32_p revision ()
+	{
+		return reg32 (base + 0x0);
+	}
+	reg32_p sysconfig ()
+	{
+		return reg32 (base + 0x10);
+	}
 	reg32_p oe ()
 	{
 		return reg32 (base + 0x134);
@@ -380,6 +388,10 @@ public:
 	arm33x_cm_reg control_clkctrl ()
 	{
 		return arm33x_cm_reg (base + 0x4);
+	}
+	arm33x_cm_reg gpio0_clkctrl ()
+	{
+		return arm33x_cm_reg (base + 0x8);
 	}
 	arm33x_cm_reg l4wkup_clkctrl ()
 	{
