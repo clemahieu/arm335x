@@ -197,6 +197,11 @@ enum class arm33x_tbctl_flags : uint16_t
 	ctrmode_stop = 0x0003
 };
 
+arm33x_tbctl_flags operator | (arm33x_tbctl_flags const & lhs, arm33x_tbctl_flags const & rhs)
+{
+	return static_cast <arm33x_tbctl_flags> (static_cast <uint32_t> (lhs) | static_cast <uint32_t> (rhs));
+}
+
 class arm33x_tbctl
 {
 public:
@@ -243,6 +248,11 @@ enum class arm33x_aqctl_flags
 	zroh = 0x0002,
 	zrot = 0x0003
 };
+
+arm33x_aqctl_flags operator | (arm33x_aqctl_flags const & lhs, arm33x_aqctl_flags const & rhs)
+{
+	return static_cast <arm33x_aqctl_flags> (static_cast <uint32_t> (lhs) | static_cast <uint32_t> (rhs));
+}
 
 // 15.2.4.3.1 Action-Qualifier Output Control Register (AQCTLA)
 class arm33x_aqctl
@@ -324,6 +334,11 @@ enum class arm33x_cm_reg_flags : uint32_t
 	modulemode_disabled = 0x00000000,
 	modulemode_enable = 0x00000002
 };
+
+arm33x_cm_reg_flags operator | (arm33x_cm_reg_flags const & lhs, arm33x_cm_reg_flags const & rhs)
+{
+	return static_cast <arm33x_cm_reg_flags> (static_cast <uint32_t> (lhs) | static_cast <uint32_t> (rhs));
+}
 
 class arm33x_cm_reg
 {
