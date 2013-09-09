@@ -103,27 +103,37 @@ public:
 	uintptr_t base;
 };
 
-class arm33x_wkup
+// Table 8-92. CM_WKUP_CLKSTCTRL
+enum class arm33x_clkstctrl_flags : uint32_t
+{
+	clkactivity_adc_fclk = 0x00004000;
+	clkactivity_time1_gclk = 0x00002000;
+	clkactivity_uart0_gfclk = 0x00001000;
+	clkactivity_i2c0_gfclk = 0x00000800;
+	clkactivity_timer0_gclk = 0x00000400;
+	clkactivity_wdt1_gclk = 0x00000010;
+	clkactivity_sr_sysclk = 0x00000008;
+	clkactivity_l4_wkup_glck = 0x00000004;
+	clktrctrl_no_sleep = 0x00000000;
+	clktrctrl_sw_sleep = 0x00000001;
+	clktrctrl_sw_wkup = 0x00000002;
+};
+
+class arm33x_clkstctrl
 {
 public:
-	arm33x_wkup (uintptr_t base_a):
+	arm33x_clkstctrl (uintptr_t base_a) :
 	base (base_a)
 	{
 	}
-	reg32_p cm_wkup_clkstctrl ()
+	arm33x_clkstctrl const & operator = (arm33x_clkstctrl_flags flags)
 	{
-		return reg32 (base + 0x00);
+		*reg32 (base) = flags;
 	}
-	reg32_p cm_wkup_adc_tsc_clkctrl ()
+	arm33x_clkstctrl_flags operator * ()
 	{
-		return reg32 (base + 0xbc);
+		return static_cast <arm33x_clkstctrl_flags> (*reg32 (base));
 	}
-	void enable_tsc_adc_clock ()
-	{
-		*cm_wkup_adc_tsc_clkctrl () = adc_tsc_clkctrl_modulemode_enable;
-	}
-	static uint32_t constexpr adc_tsc_clkctrl_modulemode_enable = 0x00000002;
-	uintptr_t base;
 };
 
 class arm33x_gpio
@@ -323,7 +333,7 @@ public:
 	{
 		*reg32 (base) = flags;
 	}
-	arm33x_cm_reg operator * ()
+	arm33x_cm_reg_flags operator * ()
 	{
 		return static_cast <arm33x_cm_reg_flags> (*reg32 (base));
 	}
@@ -333,6 +343,36 @@ public:
 	}
 	uintptr_t base;
 }
+
+class arm33x_cm_wkup
+{
+public:
+	arm33x_cm_wkup (uintptr_t base_a):
+	base (base_a)
+	{
+	}
+	arm33x_clkstctrl clkstctrl ()
+	{
+		return arm33x_clkstctrl (base + 0x00);
+	}
+	arm33x_cm_reg control_clkctrl ()
+	{
+		return arm33x_cm_reg (base + 0x4);
+	}
+	arm33x_cm_reg l4wkup_clkctrl ()
+	{
+		return arm33x_cm_reg (base + 0xc);
+	}
+	arm33x_cm_reg timer0_clkctrl ()
+	{
+		return arm33x_cm_reg (base + 0x10);
+	}
+	arm33x_cm_reg adc_tsc_clkctrl ()
+	{
+		return arm33x_cm_reg (base + 0xbc);
+	}
+	uintptr_t base;
+};
 
 // 8.1.12 Clock Module Registers
 class arm33x_cm_per
@@ -534,13 +574,13 @@ public:
 	{
 		return arm33x_prm (base + 0x04e00b00);
 	}
-	arm33x_wkup wkup ()
-	{
-		return arm33x_wkup (base + 0x04e00400);
-	}
 	arm33x_per cm_per ()
 	{
 		return arm33x_cm_per (base + 0x04e00000);
+	}
+	arm33x_wkup cm_wkup ()
+	{
+		return arm33x_cm_wkup (base + 0x04e00400);
 	}
 	arm33x_tsc_adc tsc_adc ()
 	{
