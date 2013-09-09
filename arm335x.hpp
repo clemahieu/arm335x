@@ -360,6 +360,34 @@ public:
 	{
 		return arm33x_cm_reg (base + 0xe0);
 	}
+	arm33x_cm_reg timer5 ()
+	{
+		return arm33x_cm_reg (base + 0xec);
+	}
+	arm33x_cm_reg timer6 ()
+	{
+		return arm33x_cm_reg (base + 0xf0);
+	}
+	arm33x_cm_reg mmc1 ()
+	{
+		return arm33x_cm_reg (base + 0xf4);
+	}
+	arm33x_cm_reg mmc2 ()
+	{
+		return arm33x_cm_reg (base + 0xf8);
+	}
+	arm33x_cm_reg spinlock ()
+	{
+		return arm33x_cm_reg (base + 0x10c);
+	}
+	arm33x_cm_reg mailbox0 ()
+	{
+		return arm33x_cm_reg (base + 0x110);
+	}
+	arm33x_cm_reg clkdiv32k ()
+	{
+		return arm33x_cm_reg (base + 0x14c);
+	}
 	uintptr_t base;
 };
 
