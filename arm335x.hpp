@@ -148,6 +148,110 @@ public:
 	uintptr_t base;
 };
 
+enum class arm33x_tbctl_flags : uint16_t
+{
+	soft_stop = 0x0000;
+	soft_whole = 0x4000;
+	free = 0xc000;
+	phsdir_down = 0x0000;
+	phsdir_up = 0x2000;
+	clkdiv_1 = 0x0000;
+	clkdiv_2 = 0x0400;
+	clkdiv_4 = 0x0800;
+	clkdiv_8 = 0x0c00;
+	clkdiv_16 = 0x1000;
+	clkdiv_32 = 0x1400;
+	clkdiv_64 = 0x1800;
+	clkdiv_128 = 0x1c00;
+	hspclkdiv_1 = 0x0000;
+	hspclkdiv_2 = 0x0080;
+	hspclkdiv_4 = 0x0100;
+	hspclkdiv_8 = 0x0180;
+	hspclkdiv_16 = 0x0200;
+	hspclkdiv_32 = 0x0280;
+	hspclkdiv_64 = 0x0300;
+	hspclkdiv_128 = 0x0380;
+	swfsync = 0x0040;
+	syncosel_in = 0x0000;
+	syncosel_0 = 0x0010;
+	syncosel_cmp = 0x0020;
+	syncosel_disable = 0x0030;
+	prdld = 0x0008;
+	phsen = 0x0004;
+	ctrmode_up = 0x0000;
+	ctrmode_down = 0x0001;
+	ctrmode_updown = 0x0002;
+	ctrmode_stop = 0x0003;
+};
+
+class arm33x_tbctl
+{
+public:
+	arm33x_tbctl (uintptr_t base_a) :
+	base (base_a)
+	{
+	}
+	arm33x_tbctl const & operator = (arm33x_tbctl_flags flags)
+	{
+		*reg16_p (base) = flags;
+		return *this;
+	}
+	arm33x_tbctl_flags operator * ()
+	{
+		return static_cast <arm33x_tbctl_flags> (*reg16_p (base));
+	}
+	uintptr_t base;
+}
+
+enum class arm33x_aqctl_flags
+{
+	cbdx = 0x0000;
+	cdbl = 0x0400;
+	cdbh = 0x0800;
+	cdbt = 0x0c00;
+	cbux = 0x0000;
+	cbul = 0x0100;
+	cbuh = 0x0200;
+	cbut = 0x0300;
+	cadx = 0x0000;
+	cadl = 0x0040;
+	cadh = 0x0080;
+	cadt = 0x00c0;
+	caux = 0x0000;
+	caul = 0x0010;
+	cauh = 0x0020;
+	caut = 0x0030;
+	prdx = 0x0000;
+	prdl = 0x0004;
+	prdh = 0x0008;
+	prdt = 0x000c;
+	zrox = 0x0000;
+	zrol = 0x0001;
+	zroh = 0x0002;
+	zrot = 0x0003;
+};
+
+// 15.2.4.3.1 Action-Qualifier Output Control Register (AQCTLA)
+class arm33x_aqctl
+{
+public:
+	arm33x_aqctl (uintptr_t base_a) :
+	base (base_a)
+	{
+	}
+	arm33x_aqctl const & operator = (arm33x_aqctl_flags flags)
+	{
+		*reg16 (base) = flags;
+		return *this;
+	}
+	arm33x_aqctl_flags operator * ()
+	{
+		return static_cast <arm33x_aqctl_flags> (*reg16 (base));
+	}
+	uintptr_t base;
+}
+
+// 15.2.4 Enhanced PWM (ePWM) Module Registers
 class arm33x_epwm
 {
 public:
@@ -155,9 +259,9 @@ public:
 	base (base_a)
 	{
 	}
-	reg16_p tbctl ()
+	arm33x_tbctl tbctl ()
 	{
-		return reg16 (base + 0x00);
+		return arm33x_tbctl (base + 0x00);
 	}
 	reg16_p tbsts ()
 	{
@@ -179,19 +283,21 @@ public:
 	{
 		return reg16 (base + 0x0a);
 	}
-	uintptr_t base;
-};
-
-class arm33x_pwmss
-{
-public:
-	arm33x_pwmss (uintptr_t base_a) :
-	base (base_a)
+	reg16_p cmpa ()
 	{
+		return reg16 (base + 0x12);
 	}
-	arm33x_epwm epwm ()
+	reg16_p cmpb ()
 	{
-		return arm33x_epwm (base + 0x200);
+		return reg16 (base + 0x14);
+	}
+	arm33x_aqctl aqctla ()
+	{
+		return arm33x_aqctl (base + 0x16);
+	}
+	arm33x_aqctl aqctlb ()
+	{
+		return arm33x_aqctl (base + 0x18);
 	}
 	uintptr_t base;
 };
@@ -219,7 +325,7 @@ public:
 	}
 	arm33x_cm_reg operator * ()
 	{
-		return *reg32 (base);
+		return static_cast <arm33x_cm_reg_flags> (*reg32 (base));
 	}
 	void enable ()
 	{
@@ -412,17 +518,17 @@ public:
 			base = 0x0;
 		}
 	}
-	arm33x_pwmss pwm0 ()
+	arm33x_epwm epwm0 ()
 	{
-		return arm33x_pwmss (base + 0x08300000);
+		return arm33x_epwm (base + 0x08300200);
 	}
-	arm33x_pwmss pwm1 ()
+	arm33x_epwm epwm1 ()
 	{
-		return arm33x_pwmss (base + 0x08302000);
+		return arm33x_epwm (base + 0x08302200);
 	}
-	arm33x_pwmss pwm2 ()
+	arm33x_epwm epwm2 ()
 	{
-		return arm33x_pwmss (base + 0x08304000);
+		return arm33x_epwm (base + 0x08304200);
 	}
 	arm33x_prm prm_irq ()
 	{
