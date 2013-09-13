@@ -1,5 +1,7 @@
 // AM335x ARM® Cortex™-A8 Microprocessors (MPUs) Technical Reference Manual
 
+#include <cstdint>
+
 typedef uint16_t volatile * reg16_p;
 reg16_p reg16 (uintptr_t address)
 {
@@ -106,17 +108,17 @@ public:
 // Table 8-92. CM_WKUP_CLKSTCTRL
 enum class arm33x_clkstctrl_flags : uint32_t
 {
-	clkactivity_adc_fclk = 0x00004000;
-	clkactivity_time1_gclk = 0x00002000;
-	clkactivity_uart0_gfclk = 0x00001000;
-	clkactivity_i2c0_gfclk = 0x00000800;
-	clkactivity_timer0_gclk = 0x00000400;
-	clkactivity_wdt1_gclk = 0x00000010;
-	clkactivity_sr_sysclk = 0x00000008;
-	clkactivity_l4_wkup_glck = 0x00000004;
-	clktrctrl_no_sleep = 0x00000000;
-	clktrctrl_sw_sleep = 0x00000001;
-	clktrctrl_sw_wkup = 0x00000002;
+	clkactivity_adc_fclk = 0x00004000,
+	clkactivity_time1_gclk = 0x00002000,
+	clkactivity_uart0_gfclk = 0x00001000,
+	clkactivity_i2c0_gfclk = 0x00000800,
+	clkactivity_timer0_gclk = 0x00000400,
+	clkactivity_wdt1_gclk = 0x00000010,
+	clkactivity_sr_sysclk = 0x00000008,
+	clkactivity_l4_wkup_glck = 0x00000004,
+	clktrctrl_no_sleep = 0x00000000,
+	clktrctrl_sw_sleep = 0x00000001,
+	clktrctrl_sw_wkup = 0x00000002
 };
 
 class arm33x_clkstctrl
@@ -128,12 +130,13 @@ public:
 	}
 	arm33x_clkstctrl const & operator = (arm33x_clkstctrl_flags flags)
 	{
-		*reg32 (base) = flags;
+		*reg32 (base) = static_cast <uint32_t> (flags);
 	}
 	arm33x_clkstctrl_flags operator * ()
 	{
 		return static_cast <arm33x_clkstctrl_flags> (*reg32 (base));
 	}
+	uintptr_t base;
 };
 
 class arm33x_gpio
@@ -160,38 +163,38 @@ public:
 
 enum class arm33x_tbctl_flags : uint16_t
 {
-	soft_stop = 0x0000;
-	soft_whole = 0x4000;
-	free = 0xc000;
-	phsdir_down = 0x0000;
-	phsdir_up = 0x2000;
-	clkdiv_1 = 0x0000;
-	clkdiv_2 = 0x0400;
-	clkdiv_4 = 0x0800;
-	clkdiv_8 = 0x0c00;
-	clkdiv_16 = 0x1000;
-	clkdiv_32 = 0x1400;
-	clkdiv_64 = 0x1800;
-	clkdiv_128 = 0x1c00;
-	hspclkdiv_1 = 0x0000;
-	hspclkdiv_2 = 0x0080;
-	hspclkdiv_4 = 0x0100;
-	hspclkdiv_8 = 0x0180;
-	hspclkdiv_16 = 0x0200;
-	hspclkdiv_32 = 0x0280;
-	hspclkdiv_64 = 0x0300;
-	hspclkdiv_128 = 0x0380;
-	swfsync = 0x0040;
-	syncosel_in = 0x0000;
-	syncosel_0 = 0x0010;
-	syncosel_cmp = 0x0020;
-	syncosel_disable = 0x0030;
-	prdld = 0x0008;
-	phsen = 0x0004;
-	ctrmode_up = 0x0000;
-	ctrmode_down = 0x0001;
-	ctrmode_updown = 0x0002;
-	ctrmode_stop = 0x0003;
+	soft_stop = 0x0000,
+	soft_whole = 0x4000,
+	free = 0xc000,
+	phsdir_down = 0x0000,
+	phsdir_up = 0x2000,
+	clkdiv_1 = 0x0000,
+	clkdiv_2 = 0x0400,
+	clkdiv_4 = 0x0800,
+	clkdiv_8 = 0x0c00,
+	clkdiv_16 = 0x1000,
+	clkdiv_32 = 0x1400,
+	clkdiv_64 = 0x1800,
+	clkdiv_128 = 0x1c00,
+	hspclkdiv_1 = 0x0000,
+	hspclkdiv_2 = 0x0080,
+	hspclkdiv_4 = 0x0100,
+	hspclkdiv_8 = 0x0180,
+	hspclkdiv_16 = 0x0200,
+	hspclkdiv_32 = 0x0280,
+	hspclkdiv_64 = 0x0300,
+	hspclkdiv_128 = 0x0380,
+	swfsync = 0x0040,
+	syncosel_in = 0x0000,
+	syncosel_0 = 0x0010,
+	syncosel_cmp = 0x0020,
+	syncosel_disable = 0x0030,
+	prdld = 0x0008,
+	phsen = 0x0004,
+	ctrmode_up = 0x0000,
+	ctrmode_down = 0x0001,
+	ctrmode_updown = 0x0002,
+	ctrmode_stop = 0x0003
 };
 
 class arm33x_tbctl
@@ -203,7 +206,7 @@ public:
 	}
 	arm33x_tbctl const & operator = (arm33x_tbctl_flags flags)
 	{
-		*reg16_p (base) = flags;
+		*reg16_p (base) = static_cast <uint16_t> (flags);
 		return *this;
 	}
 	arm33x_tbctl_flags operator * ()
@@ -211,34 +214,34 @@ public:
 		return static_cast <arm33x_tbctl_flags> (*reg16_p (base));
 	}
 	uintptr_t base;
-}
+};
 
 enum class arm33x_aqctl_flags
 {
-	cbdx = 0x0000;
-	cdbl = 0x0400;
-	cdbh = 0x0800;
-	cdbt = 0x0c00;
-	cbux = 0x0000;
-	cbul = 0x0100;
-	cbuh = 0x0200;
-	cbut = 0x0300;
-	cadx = 0x0000;
-	cadl = 0x0040;
-	cadh = 0x0080;
-	cadt = 0x00c0;
-	caux = 0x0000;
-	caul = 0x0010;
-	cauh = 0x0020;
-	caut = 0x0030;
-	prdx = 0x0000;
-	prdl = 0x0004;
-	prdh = 0x0008;
-	prdt = 0x000c;
-	zrox = 0x0000;
-	zrol = 0x0001;
-	zroh = 0x0002;
-	zrot = 0x0003;
+	cbdx = 0x0000,
+	cdbl = 0x0400,
+	cdbh = 0x0800,
+	cdbt = 0x0c00,
+	cbux = 0x0000,
+	cbul = 0x0100,
+	cbuh = 0x0200,
+	cbut = 0x0300,
+	cadx = 0x0000,
+	cadl = 0x0040,
+	cadh = 0x0080,
+	cadt = 0x00c0,
+	caux = 0x0000,
+	caul = 0x0010,
+	cauh = 0x0020,
+	caut = 0x0030,
+	prdx = 0x0000,
+	prdl = 0x0004,
+	prdh = 0x0008,
+	prdt = 0x000c,
+	zrox = 0x0000,
+	zrol = 0x0001,
+	zroh = 0x0002,
+	zrot = 0x0003
 };
 
 // 15.2.4.3.1 Action-Qualifier Output Control Register (AQCTLA)
@@ -251,7 +254,7 @@ public:
 	}
 	arm33x_aqctl const & operator = (arm33x_aqctl_flags flags)
 	{
-		*reg16 (base) = flags;
+		*reg16 (base) = static_cast <uint16_t> (flags);
 		return *this;
 	}
 	arm33x_aqctl_flags operator * ()
@@ -259,7 +262,7 @@ public:
 		return static_cast <arm33x_aqctl_flags> (*reg16 (base));
 	}
 	uintptr_t base;
-}
+};
 
 // 15.2.4 Enhanced PWM (ePWM) Module Registers
 class arm33x_epwm
@@ -314,12 +317,12 @@ public:
 
 enum class arm33x_cm_reg_flags : uint32_t
 {
-	idlest_func = 0x00000000;
-	idlest_trans = 0x00010000;
-	idlest_idle = 0x00020000;
-	idlest_disable = 0x00030000;
-	modulemode_disabled = 0x00000000;
-	modulemode_enable = 0x00000002;
+	idlest_func = 0x00000000,
+	idlest_trans = 0x00010000,
+	idlest_idle = 0x00020000,
+	idlest_disable = 0x00030000,
+	modulemode_disabled = 0x00000000,
+	modulemode_enable = 0x00000002
 };
 
 class arm33x_cm_reg
@@ -331,7 +334,7 @@ public:
 	}
 	arm33x_cm_reg const & operator = (arm33x_cm_reg_flags flags)
 	{
-		*reg32 (base) = flags;
+		*reg32 (base) = static_cast <uint32_t> (flags);
 	}
 	arm33x_cm_reg_flags operator * ()
 	{
@@ -339,10 +342,10 @@ public:
 	}
 	void enable ()
 	{
-		(*this) = arm33x_cm_reg_flags.modulemode_enable;
+		(*this) = arm33x_cm_reg_flags::modulemode_enable;
 	}
 	uintptr_t base;
-}
+};
 
 class arm33x_cm_wkup
 {
@@ -378,7 +381,7 @@ public:
 class arm33x_cm_per
 {
 public:
-	arm33x_per (uintptr_t base_a) :
+	arm33x_cm_per (uintptr_t base_a) :
 	base (base_a)
 	{
 	}
@@ -574,11 +577,11 @@ public:
 	{
 		return arm33x_prm (base + 0x04e00b00);
 	}
-	arm33x_per cm_per ()
+	arm33x_cm_per cm_per ()
 	{
 		return arm33x_cm_per (base + 0x04e00000);
 	}
-	arm33x_wkup cm_wkup ()
+	arm33x_cm_wkup cm_wkup ()
 	{
 		return arm33x_cm_wkup (base + 0x04e00400);
 	}
