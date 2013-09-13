@@ -544,22 +544,9 @@ public:
 class arm33x
 {
 public:
-	arm33x ()
+	arm33x (uintptr_t base_a) :
+	base (base_a)
 	{
-		auto fd (open ("/dev/mem", O_RDWR));
-		if (fd != -1)
-		{
-			auto map (mmap (0, mapping_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, mapping_base));
-			base = reinterpret_cast <uintptr_t> (map);
-			if (map == MAP_FAILED)
-			{
-				base = 0x0;
-			}
-		}
-		else
-		{
-			base = 0x0;
-		}
 	}
 	arm33x_epwm epwm0 ()
 	{
