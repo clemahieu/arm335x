@@ -162,6 +162,10 @@ public:
 	{
 		return reg32 (base + 0x134);
 	}
+	reg32_p dataout ()
+	{
+		return reg32 (base + 0x13c);
+	}
 	reg32_p clear_data_out ()
 	{
 		return reg32 (base + 0x190);
@@ -503,6 +507,18 @@ public:
 	arm33x_cm_reg timer4 ()
 	{
 		return arm33x_cm_reg (base + 0x88);
+	}
+	arm33x_cm_reg gpio1 ()
+	{
+		return arm33x_cm_reg (base + 0xac);
+	}
+	arm33x_cm_reg gpio2 ()
+	{
+		return arm33x_cm_reg (base + 0xb0);
+	}
+	arm33x_cm_reg gpio3 ()
+	{
+		return arm33x_cm_reg (base + 0xb4);
 	}
 	arm33x_cm_reg tpcc ()
 	{
